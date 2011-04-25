@@ -25,6 +25,9 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private Handler mRefreshHandler;
     private List<Ad> mAds;
     private AdConfiguration mConfiguration;
+    private boolean mStarted;
+    private boolean mRunning;
+    private boolean mVisible;
 
     public AdSwitcher(Context context, String adSwitcherId) {
         super(context);
@@ -42,6 +45,19 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         init();
     }
 
+    private Handler mHandler;
+    private void updateRunning() {
+		boolean running = mVisible && mStarted;
+        if (running != mRunning) {
+            if (running) {
+            	mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getInterval());
+            } else {
+                mHandler.removeMessages(REFRESH_AD);
+            }
+            mRunning = running;
+        }
+	}
+
     private void init() {
         mConfiguration = AdSettings.getConfiguration(mAdSwitcherId);
         mAds = buildAds();
@@ -52,37 +68,23 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
             }
             addView(ad.getView());
         }
-        Thread refreshThread = new Thread() {
-            @Override
-            public void run() {
-                Log.i(getLogTag(), "Refresh Thread started");
-                Looper.prepare();
-                mRefreshLooper = Looper.myLooper();
-                mRefreshHandler = new Handler(mRefreshLooper) {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        switch (msg.what) {
-                            case REFRESH_AD: {
-                                Log.i(getLogTag(), "Refresh Ad message received.");
-                                for (Ad ad : mAds) {
-                                    ad.refresh();
-                                }
-                                switchAds();
-                                break;
-                            }
-                        }
+        mHandler = new Handler() {
+            public void handleMessage(Message m) {
+                if (mRunning) {
+                    Log.i(getLogTag(), "Refresh Ad message received.");
+                    for (Ad ad : mAds) {
+                        ad.refresh();
                     }
+                    switchAds();
+                    sendMessageDelayed(Message.obtain(this, REFRESH_AD), mConfiguration.getInterval());
+                }
+            }
 
-                    @Override
-                    public String toString() {
-                        return AdSwitcher.this.toString()+":"+getContext();
-                    }
-                };
-                Looper.loop();
-                Log.i(getLogTag(), "Refresh Thread stopped");
+            @Override
+            public String toString() {
+                return AdSwitcher.this.toString() + ":" + getContext();
             }
         };
-        refreshThread.start();
     }
 
     private List<Ad> buildAds() {
@@ -109,28 +111,24 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mStarted = true;
+        updateRunning();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mRefreshLooper != null) {
-            mRefreshLooper.quit();
-            mRefreshLooper = null;
-            mRefreshHandler = null;
-        }
+        mStarted = false;
+        updateRunning();
     }
 
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if (mRefreshHandler != null) {
-            mRefreshHandler.removeMessages(REFRESH_AD);
-            if (visibility == View.VISIBLE) {
-                mRefreshHandler.sendEmptyMessage(REFRESH_AD);
-            } else {
-                for (Ad ad : mAds) {
-                    ad.pause();
-                }
-            }
-        }
+        mVisible = visibility == VISIBLE;
+        updateRunning();
     }
 
     private void switchAds() {
