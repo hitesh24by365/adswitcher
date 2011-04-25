@@ -27,10 +27,10 @@ public abstract class Ad {
     }
 
     protected final void setAvailable(boolean available) {
+        this.available = available;
         if (onAdAvailabilityChanged != null) {
             onAdAvailabilityChanged.onAdAvailabilityChanged(this);
         }
-        this.available = available;
     }
 
     public final boolean isAvailable() {

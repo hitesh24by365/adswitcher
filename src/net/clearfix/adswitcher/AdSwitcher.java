@@ -2,10 +2,10 @@ package net.clearfix.adswitcher;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.ViewFlipper;
@@ -21,13 +21,12 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private static final String TAG = "AD_SWITCHER";
 
     private final String mAdSwitcherId;
-    private Looper mRefreshLooper;
-    private Handler mRefreshHandler;
     private List<Ad> mAds;
     private AdConfiguration mConfiguration;
     private boolean mStarted;
     private boolean mRunning;
     private boolean mVisible;
+    private LayoutParams mParams;
 
     public AdSwitcher(Context context, String adSwitcherId) {
         super(context);
@@ -59,6 +58,8 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
 	}
 
     private void init() {
+        mParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        mParams.gravity = Gravity.CENTER_HORIZONTAL;
         mConfiguration = AdSettings.getConfiguration(mAdSwitcherId);
         mAds = buildAds();
         for (Ad ad : mAds) {
@@ -66,7 +67,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
             if (parent != null) {
                 ((AdSwitcher) parent).removeView(ad.getView());
             }
-            addView(ad.getView());
+            addView(ad.getView(), mParams);
         }
         mHandler = new Handler() {
             public void handleMessage(Message m) {
@@ -144,10 +145,6 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
             Log.i(getLogTag(), "Hiding ads");
             setVisibility(View.GONE);
         }
-        if (mRefreshHandler != null) {
-            mRefreshHandler.removeMessages(REFRESH_AD);
-            mRefreshHandler.sendEmptyMessageDelayed(REFRESH_AD, mConfiguration.getInterval());
-        }
     }
 
     private void setCurrentAd(Ad ad) {
@@ -161,7 +158,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     }
 
     public void onAdAvailabilityChanged(Ad ad) {
-        if (!ad.isAvailable()) {
+        if (!ad.isAvailable() || getVisibility() == View.VISIBLE) {
             return;
         }
         boolean atLeastOneAvailable = false;
