@@ -72,6 +72,11 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
                             }
                         }
                     }
+
+                    @Override
+                    public String toString() {
+                        return AdSwitcher.this.toString()+":"+getContext();
+                    }
                 };
                 Looper.loop();
                 Log.i(getLogTag(), "Refresh Thread stopped");
