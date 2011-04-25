@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewParent;
 import android.widget.ViewFlipper;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdSwitcher extends ViewFlipper {
+public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private final static int REFRESH_AD = 101;
     private static final String AD_SWITCHER_ID = "adSwitcherId";
     private static final String TAG = "AD_SWITCHER";
@@ -41,7 +44,7 @@ public class AdSwitcher extends ViewFlipper {
 
     private void init() {
         mConfiguration = AdSettings.getConfiguration(mAdSwitcherId);
-        mAds = mConfiguration.getAds();
+        mAds = buildAds();
         for (Ad ad : mAds) {
             ViewParent parent = ad.getView().getParent();
             if (parent != null) {
@@ -77,6 +80,29 @@ public class AdSwitcher extends ViewFlipper {
         refreshThread.start();
     }
 
+    private List<Ad> buildAds() {
+        List<Ad> ads = new ArrayList<Ad>();
+        List<Class<? extends Ad>> adsClasses = mConfiguration.getAds();
+        for (Class<? extends Ad> adClass : adsClasses) {
+            try {
+                Constructor<? extends Ad> constructor = adClass.getConstructor(Context.class);
+                Ad ad = constructor.newInstance(getContext());
+                ad.setOnAdAvailabilityChanged(this);
+                ads.add(ad);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ads;
+    }
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -106,9 +132,7 @@ public class AdSwitcher extends ViewFlipper {
         boolean showAds = false;
         for (Ad ad : mAds) {
             if (ad.isAvailable()) {
-                Log.i(getLogTag(), "Showing ad " + ad);
-                setDisplayedChild(mAds.indexOf(ad));
-                setVisibility(View.VISIBLE);
+                setCurrentAd(ad);
                 showAds = true;
                 break;
             }
@@ -123,7 +147,28 @@ public class AdSwitcher extends ViewFlipper {
         }
     }
 
+    private void setCurrentAd(Ad ad) {
+        Log.i(getLogTag(), "Showing ad " + ad);
+        setDisplayedChild(mAds.indexOf(ad));
+        setVisibility(View.VISIBLE);
+    }
+
     private String getLogTag() {
         return TAG + ":" + mAdSwitcherId;
+    }
+
+    public void onAdAvailabilityChanged(Ad ad) {
+        if (!ad.isAvailable()) {
+            return;
+        }
+        boolean atLeastOneAvailable = false;
+        for (Ad anAd : mAds) {
+            if (anAd != ad && anAd.isAvailable()) {
+                atLeastOneAvailable = true;
+            }
+        }
+        if (!atLeastOneAvailable) {
+            setCurrentAd(ad);
+        }
     }
 }

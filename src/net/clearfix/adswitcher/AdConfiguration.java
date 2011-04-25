@@ -7,14 +7,14 @@ public class AdConfiguration {
     private final static long DEFAULT_REFRESH_INTERVAL = 30000;
 
     private final long interval;
-    private final List<Ad> ads;
+    private final List<Class<? extends Ad>> ads;
 
-    private AdConfiguration(long interval, List<Ad> ads) {
+    private AdConfiguration(long interval, List<Class<? extends Ad>> ads) {
         this.interval = interval;
         this.ads = ads;
     }
 
-    public List<Ad> getAds() {
+    public List<Class<? extends Ad>> getAds() {
         return ads;
     }
 
@@ -24,15 +24,15 @@ public class AdConfiguration {
 
     public static class Builder {
         private long interval = DEFAULT_REFRESH_INTERVAL;
-        private List<Ad> ads = new ArrayList<Ad>();
+        private List<Class<? extends Ad>> ads = new ArrayList<Class<? extends Ad>>();
 
         public Builder setInterval(int interval) {
             this.interval = interval;
             return this;
         }
 
-        public Builder addAd(Ad ad) {
-            ads.add(ad);
+        public Builder addAd(Class<? extends Ad> clazz) {
+            ads.add(clazz);
             return this;
         }
 

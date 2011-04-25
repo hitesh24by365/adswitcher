@@ -4,6 +4,7 @@ import android.view.View;
 
 public abstract class Ad {
     private boolean available = false;
+    private OnAdAvailabilityChanged onAdAvailabilityChanged;
 
     /**
      * Must return the ad banner
@@ -29,7 +30,14 @@ public abstract class Ad {
         this.available = available;
     }
 
-    public final boolean isAvailable(){
+    public final boolean isAvailable() {
+        if (onAdAvailabilityChanged != null) {
+            onAdAvailabilityChanged.onAdAvailabilityChanged(this);
+        }
         return available;
+    }
+
+    public void setOnAdAvailabilityChanged(OnAdAvailabilityChanged onAdAvailabilityChanged) {
+        this.onAdAvailabilityChanged = onAdAvailabilityChanged;
     }
 }
