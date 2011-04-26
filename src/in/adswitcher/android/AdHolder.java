@@ -1,10 +1,20 @@
 package in.adswitcher.android;
 
+import android.content.Context;
 import android.view.View;
 
-public abstract class Ad {
+/**
+ * Holds an Ad and its state. Important: you can create custom constructors, but the first parameter of them
+ * have to be a Context instance, which must be used to create the ad view.
+ */
+public abstract class AdHolder {
     private boolean available = false;
     private OnAdAvailabilityChanged onAdAvailabilityChanged;
+    private final Context context;
+
+    public AdHolder(Context context) {
+        this.context = context;
+    }
 
     /**
      * Must return the ad banner
@@ -14,7 +24,10 @@ public abstract class Ad {
 
     /**
      * This is called by the ad switcher and you must
-     * make sure that you are refreshing your ads here
+     * make sure that you are refreshing your ads here.
+     * Examples:
+     * mobclixAd.getAd(); // for Mobclix
+     * adView.loadAd(new AdRequest()); // for AdMob
      */
     public abstract void refresh();
 
@@ -26,6 +39,12 @@ public abstract class Ad {
     protected void pause() {
     }
 
+    /**
+     * Use this to change the availability of the ad. Most ad SDKs
+     * provide listeners for their ads that will allow you to know
+     * whether the ad was served or not.
+     * @param available
+     */
     protected final void setAvailable(boolean available) {
         this.available = available;
         if (onAdAvailabilityChanged != null) {
@@ -33,11 +52,18 @@ public abstract class Ad {
         }
     }
 
+    /**
+     * @return true if the ad was served and can be shown
+     */
     public final boolean isAvailable() {
         return available;
     }
 
-    public void setOnAdAvailabilityChanged(OnAdAvailabilityChanged onAdAvailabilityChanged) {
+    void setOnAdAvailabilityChanged(OnAdAvailabilityChanged onAdAvailabilityChanged) {
         this.onAdAvailabilityChanged = onAdAvailabilityChanged;
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

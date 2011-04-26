@@ -15,13 +15,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is a custom view that will contain and display the ads according to the specified configuration. This view
+ * will refresh automatically your views and hide itself if there's no ad available... similarly, it will be visible
+ * if one of your ads become available.
+ */
 public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private final static int REFRESH_AD = 101;
     private static final String AD_SWITCHER_ID = "adSwitcherId";
     private static final String TAG = "AD_SWITCHER";
 
     private final String mAdSwitcherId;
-    private List<Ad> mAds;
+    private List<AdHolder> mAdHolders;
     private AdConfiguration mConfiguration;
     private boolean mStarted;
     private boolean mRunning;
@@ -29,6 +34,10 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private LayoutParams mParams;
     private Handler mHandler;
 
+    /**
+     * @param context
+     * @param adSwitcherId the configuration ID
+     */
     public AdSwitcher(Context context, String adSwitcherId) {
         super(context);
         mAdSwitcherId = adSwitcherId;
@@ -49,23 +58,23 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         mParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         mParams.gravity = Gravity.CENTER_HORIZONTAL;
         mConfiguration = AdSettings.getConfiguration(mAdSwitcherId);
-        mAds = buildAds();
-        for (Ad ad : mAds) {
-            ViewParent parent = ad.getView().getParent();
+        mAdHolders = buildAds();
+        for (AdHolder adHolder : mAdHolders) {
+            ViewParent parent = adHolder.getView().getParent();
             if (parent != null) {
-                ((AdSwitcher) parent).removeView(ad.getView());
+                ((AdSwitcher) parent).removeView(adHolder.getView());
             }
-            addView(ad.getView(), mParams);
+            addView(adHolder.getView(), mParams);
         }
         mHandler = new Handler() {
             public void handleMessage(Message m) {
                 if (mRunning) {
-                    Log.i(getLogTag(), "Refresh Ad message received.");
-                    for (Ad ad : mAds) {
-                        ad.refresh();
+                    Log.i(getLogTag(), "Refresh AdHolder message received.");
+                    for (AdHolder adHolder : mAdHolders) {
+                        adHolder.refresh();
                     }
                     showAds();
-                    sendMessageDelayed(Message.obtain(this, REFRESH_AD), mConfiguration.getInterval());
+                    sendMessageDelayed(Message.obtain(this, REFRESH_AD), mConfiguration.getRefreshInterval());
                 }
             }
 
@@ -77,34 +86,34 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         showAds();
     }
 
-    private List<Ad> buildAds() {
-        List<Ad> ads = new ArrayList<Ad>();
-        List<Class<? extends Ad>> adsClasses = mConfiguration.getAds();
-        for (Class<? extends Ad> adClass : adsClasses) {
+    private List<AdHolder> buildAds() {
+        List<AdHolder> adHolders = new ArrayList<AdHolder>();
+        List<Class<? extends AdHolder>> adsClasses = mConfiguration.getAdHolders();
+        for (Class<? extends AdHolder> adClass : adsClasses) {
             try {
-                Ad ad;
-                List<Parameter> params = mConfiguration.getParams(adClass);
+                AdHolder adHolder;
+                List<AdParameter> params = mConfiguration.getParams(adClass);
                 if (params == null) {
                     // constructor is simple
-                    Constructor<? extends Ad> constructor = adClass.getConstructor(Context.class);
-                    ad = constructor.newInstance(getContext());
+                    Constructor<? extends AdHolder> constructor = adClass.getConstructor(Context.class);
+                    adHolder = constructor.newInstance(getContext());
                 } else {
                     List<Class> clazzes = new ArrayList<Class>();
                     clazzes.add(Context.class);
-                    for (Parameter param : params) {
+                    for (AdParameter param : params) {
                         clazzes.add(param.getKey());
                     }
-                    Constructor<? extends Ad> constructor = adClass.getConstructor(clazzes.toArray(new Class[]{}));
+                    Constructor<? extends AdHolder> constructor = adClass.getConstructor(clazzes.toArray(new Class[]{}));
                     // set values
                     List<Object> values = new ArrayList<Object>();
                     values.add(getContext());
-                    for (Parameter param : params) {
+                    for (AdParameter param : params) {
                         values.add(param.getValue());
                     }
-                    ad = constructor.newInstance(values.toArray(new Object[]{}));
+                    adHolder = constructor.newInstance(values.toArray(new Object[]{}));
                 }
-                ad.setOnAdAvailabilityChanged(this);
-                ads.add(ad);
+                adHolder.setOnAdAvailabilityChanged(this);
+                adHolders.add(adHolder);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -116,7 +125,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
             }
         }
 
-        return ads;
+        return adHolders;
     }
 
     @Override
@@ -142,9 +151,9 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
 
     private void showAds() {
         boolean showAds = false;
-        for (Ad ad : mAds) {
-            if (ad.isAvailable()) {
-                setCurrentAd(ad);
+        for (AdHolder adHolder : mAdHolders) {
+            if (adHolder.isAvailable()) {
+                setCurrentAd(adHolder);
                 showAds = true;
                 break;
             }
@@ -155,9 +164,9 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         }
     }
 
-    private void setCurrentAd(Ad ad) {
-        Log.i(getLogTag(), "Showing ad " + ad);
-        setDisplayedChild(mAds.indexOf(ad));
+    private void setCurrentAd(AdHolder adHolder) {
+        Log.i(getLogTag(), "Showing adHolder " + adHolder);
+        setDisplayedChild(mAdHolders.indexOf(adHolder));
         setVisibility(View.VISIBLE);
     }
 
@@ -165,18 +174,18 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         return TAG + ":" + mAdSwitcherId;
     }
 
-    public void onAdAvailabilityChanged(Ad ad) {
-        if (!ad.isAvailable() || getVisibility() == View.VISIBLE) {
+    public void onAdAvailabilityChanged(AdHolder adHolder) {
+        if (!adHolder.isAvailable() || getVisibility() == View.VISIBLE) {
             return;
         }
         boolean atLeastOneAvailable = false;
-        for (Ad anAd : mAds) {
-            if (anAd != ad && anAd.isAvailable()) {
+        for (AdHolder anAdHolder : mAdHolders) {
+            if (anAdHolder != adHolder && anAdHolder.isAvailable()) {
                 atLeastOneAvailable = true;
             }
         }
         if (!atLeastOneAvailable) {
-            setCurrentAd(ad);
+            setCurrentAd(adHolder);
         }
     }
 
@@ -184,7 +193,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         boolean running = mVisible && mStarted;
         if (running != mRunning) {
             if (running) {
-                mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getInterval());
+                mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getRefreshInterval());
             } else {
                 mHandler.removeMessages(REFRESH_AD);
             }

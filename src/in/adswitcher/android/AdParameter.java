@@ -1,11 +1,11 @@
 package in.adswitcher.android;
 
-public class Parameter {
+public class AdParameter {
     private final Class clazz;
     private final Object value;
 
-    public Parameter(Class clazz, Object value) {
-        this.clazz = clazz;
+    public AdParameter(Class key, Object value) {
+        this.clazz = key;
         this.value = value;
     }
 

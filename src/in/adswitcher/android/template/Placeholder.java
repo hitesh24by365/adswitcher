@@ -1,4 +1,4 @@
-package in.adswitcher.android;
+package in.adswitcher.android.template;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,34 +6,47 @@ import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import in.adswitcher.android.AdHolder;
 
 import java.util.Random;
 
-public class Placeholder extends Ad {
+/**
+ * Test Ad View. This is just a placeholder ad which can be used to test the ad switcher.
+ */
+public class Placeholder extends AdHolder {
     private final TextView view;
     private final boolean showRandomly;
 
     public Placeholder(Context context) {
-        this(context, "Ad placeholder");
+        this(context, "AdHolder placeholder");
     }
 
+    /**
+     * @param context
+     * @param label the text to show in the ad
+     */
     public Placeholder(Context context, String label) {
         this(context, label, getDefaultClickListener());
     }
 
-    private static View.OnClickListener getDefaultClickListener() {
-        return new View.OnClickListener() {
-            public void onClick(View view) {
-                view.setBackgroundColor(new Random().nextInt());
-            }
-        };
-    }
-
+    /**
+     * @param context
+     * @param label the text to show in the ad
+     * @param clickListener the click listener to set to the ad
+     */
     public Placeholder(Context context, String label, View.OnClickListener clickListener) {
         this(context, label, clickListener, false);
     }
 
+    /**
+     * @param context
+     * @param label the text to show in the ad
+     * @param clickListener the click listener to set to the ad
+     * @param showRandomly if true, the ad will report to be available or unavailable randomly. if false, the ad
+     * will always be available
+     */
     public Placeholder(Context context, String label, View.OnClickListener clickListener, Boolean showRandomly) {
+        super(context);
         this.showRandomly = showRandomly;
         view = new TextView(context);
         view.setBackgroundColor(Color.RED);
@@ -48,6 +61,14 @@ public class Placeholder extends Ad {
             view.setOnClickListener(clickListener);
         }
         refresh();
+    }
+
+    private static View.OnClickListener getDefaultClickListener() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                view.setBackgroundColor(new Random().nextInt());
+            }
+        };
     }
 
     @Override
