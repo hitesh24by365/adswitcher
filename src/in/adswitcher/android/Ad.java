@@ -1,4 +1,4 @@
-package net.clearfix.adswitcher;
+package in.adswitcher.android;
 
 import android.view.View;
 

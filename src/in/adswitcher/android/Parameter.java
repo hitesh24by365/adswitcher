@@ -1,4 +1,4 @@
-package net.clearfix.adswitcher;
+package in.adswitcher.android;
 
 public class Parameter {
     private final Class clazz;

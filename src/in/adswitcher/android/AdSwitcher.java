@@ -1,4 +1,4 @@
-package net.clearfix.adswitcher;
+package in.adswitcher.android;
 
 import android.content.Context;
 import android.os.Handler;
@@ -27,6 +27,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private boolean mRunning;
     private boolean mVisible;
     private LayoutParams mParams;
+    private Handler mHandler;
 
     public AdSwitcher(Context context, String adSwitcherId) {
         super(context);
@@ -43,20 +44,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         }
         init();
     }
-
-    private Handler mHandler;
-    private void updateRunning() {
-		boolean running = mVisible && mStarted;
-        if (running != mRunning) {
-            if (running) {
-            	mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getInterval());
-            } else {
-                mHandler.removeMessages(REFRESH_AD);
-            }
-            mRunning = running;
-        }
-	}
-
+    
     private void init() {
         mParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         mParams.gravity = Gravity.CENTER_HORIZONTAL;
@@ -76,7 +64,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
                     for (Ad ad : mAds) {
                         ad.refresh();
                     }
-                    switchAds();
+                    showAds();
                     sendMessageDelayed(Message.obtain(this, REFRESH_AD), mConfiguration.getInterval());
                 }
             }
@@ -86,6 +74,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
                 return AdSwitcher.this.toString() + ":" + getContext();
             }
         };
+        showAds();
     }
 
     private List<Ad> buildAds() {
@@ -93,8 +82,27 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         List<Class<? extends Ad>> adsClasses = mConfiguration.getAds();
         for (Class<? extends Ad> adClass : adsClasses) {
             try {
-                Constructor<? extends Ad> constructor = adClass.getConstructor(Context.class);
-                Ad ad = constructor.newInstance(getContext());
+                Ad ad;
+                List<Parameter> params = mConfiguration.getParams(adClass);
+                if (params == null) {
+                    // constructor is simple
+                    Constructor<? extends Ad> constructor = adClass.getConstructor(Context.class);
+                    ad = constructor.newInstance(getContext());
+                } else {
+                    List<Class> clazzes = new ArrayList<Class>();
+                    clazzes.add(Context.class);
+                    for (Parameter param : params) {
+                        clazzes.add(param.getKey());
+                    }
+                    Constructor<? extends Ad> constructor = adClass.getConstructor(clazzes.toArray(new Class[]{}));
+                    // set values
+                    List<Object> values = new ArrayList<Object>();
+                    values.add(getContext());
+                    for (Parameter param : params) {
+                        values.add(param.getValue());
+                    }
+                    ad = constructor.newInstance(values.toArray(new Object[]{}));
+                }
                 ad.setOnAdAvailabilityChanged(this);
                 ads.add(ad);
             } catch (NoSuchMethodException e) {
@@ -132,7 +140,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         updateRunning();
     }
 
-    private void switchAds() {
+    private void showAds() {
         boolean showAds = false;
         for (Ad ad : mAds) {
             if (ad.isAvailable()) {
@@ -169,6 +177,18 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         }
         if (!atLeastOneAvailable) {
             setCurrentAd(ad);
+        }
+    }
+
+    private void updateRunning() {
+        boolean running = mVisible && mStarted;
+        if (running != mRunning) {
+            if (running) {
+                mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getInterval());
+            } else {
+                mHandler.removeMessages(REFRESH_AD);
+            }
+            mRunning = running;
         }
     }
 }
