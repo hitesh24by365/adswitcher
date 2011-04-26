@@ -26,8 +26,8 @@ public abstract class AdHolder {
      * This is called by the ad switcher and you must
      * make sure that you are refreshing your ads here.
      * <p>Examples:</p>
-     * <p><code>mobclixAd.getAd(); // for Mobclix</code><br/>
-     * <code>adView.loadAd(new AdRequest()); // for AdMob</code></p>
+     * <pre>mobclixAd.getAd(); // for Mobclix
+     *adView.loadAd(new AdRequest()); // for AdMob</pre>
      */
     public abstract void refresh();
 

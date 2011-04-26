@@ -9,6 +9,11 @@ public class AdParameter {
         this.value = value;
     }
 
+    public AdParameter(Object value) {
+        this.clazz = Object.class;
+        this.value = value;
+    }
+
     public Class getKey() {
         return clazz;
     }

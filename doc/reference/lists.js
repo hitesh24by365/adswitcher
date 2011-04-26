@@ -7,6 +7,8 @@ var DATA = [
       { id:5, label:"in.adswitcher.android.AdSettings", link:"in/adswitcher/android/AdSettings.html", type:"class" },
       { id:6, label:"in.adswitcher.android.AdSwitcher", link:"in/adswitcher/android/AdSwitcher.html", type:"class" },
       { id:7, label:"in.adswitcher.android.template", link:"in/adswitcher/android/template/package-summary.html", type:"package" },
-      { id:8, label:"in.adswitcher.android.template.Placeholder", link:"in/adswitcher/android/template/Placeholder.html", type:"class" }
+      { id:8, label:"in.adswitcher.android.template.AdmobAd", link:"in/adswitcher/android/template/AdmobAd.html", type:"class" },
+      { id:9, label:"in.adswitcher.android.template.MobclixAd", link:"in/adswitcher/android/template/MobclixAd.html", type:"class" },
+      { id:10, label:"in.adswitcher.android.template.Placeholder", link:"in/adswitcher/android/template/Placeholder.html", type:"class" }
 
     ];
