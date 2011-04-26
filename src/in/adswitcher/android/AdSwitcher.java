@@ -21,7 +21,8 @@ import java.util.List;
  * if one of your ads become available.
  */
 public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
-    private final static int REFRESH_AD = 101;
+    private final static int REFRESH_AD = 123;
+    private final static int ROTATE_AD = 321;
     private static final String AD_SWITCHER_ID = "adSwitcherId";
     private static final String TAG = "AD_SWITCHER";
 
@@ -31,11 +32,10 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private boolean mStarted;
     private boolean mRunning;
     private boolean mVisible;
-    private LayoutParams mParams;
     private Handler mHandler;
 
     /**
-     * @param context
+     * @param context the context used to inflate the view
      * @param adSwitcherId the configuration ID
      */
     public AdSwitcher(Context context, String adSwitcherId) {
@@ -53,10 +53,10 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         }
         init();
     }
-    
+
     private void init() {
-        mParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        mParams.gravity = Gravity.CENTER_HORIZONTAL;
+        LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
         mConfiguration = AdSettings.getConfiguration(mAdSwitcherId);
         mAdHolders = buildAds();
         for (AdHolder adHolder : mAdHolders) {
@@ -64,17 +64,30 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
             if (parent != null) {
                 ((AdSwitcher) parent).removeView(adHolder.getView());
             }
-            addView(adHolder.getView(), mParams);
+            addView(adHolder.getView(), params);
         }
         mHandler = new Handler() {
             public void handleMessage(Message m) {
                 if (mRunning) {
-                    Log.i(getLogTag(), "Refresh AdHolder message received.");
-                    for (AdHolder adHolder : mAdHolders) {
-                        adHolder.refresh();
+                    switch (m.what) {
+                        case REFRESH_AD:
+                            Log.i(getLogTag(), "Refresh AdHolder message received.");
+                            for (AdHolder adHolder : mAdHolders) {
+                                adHolder.refresh();
+                            }
+                            showAds();
+                            if (mConfiguration.getRefreshInterval() != -1) {
+                                sendMessageDelayed(Message.obtain(this, REFRESH_AD), mConfiguration.getRefreshInterval());
+                            }
+                            break;
+                        case ROTATE_AD:
+                            Log.i(getLogTag(), "Rotate AdHolder message received.");
+                            rotateAd();
+                            if (mConfiguration.getRotateInterval() != -1) {
+                                sendMessageDelayed(Message.obtain(this, ROTATE_AD), mConfiguration.getRotateInterval());
+                            }
+                            break;
                     }
-                    showAds();
-                    sendMessageDelayed(Message.obtain(this, REFRESH_AD), mConfiguration.getRefreshInterval());
                 }
             }
 
@@ -103,14 +116,14 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
                     for (AdParameter param : params) {
                         clazzes.add(param.getKey());
                     }
-                    Constructor<? extends AdHolder> constructor = adClass.getConstructor(clazzes.toArray(new Class[]{}));
+                    Constructor<? extends AdHolder> constructor = adClass.getConstructor(clazzes.toArray(new Class[clazzes.size()]));
                     // set values
                     List<Object> values = new ArrayList<Object>();
                     values.add(getContext());
                     for (AdParameter param : params) {
                         values.add(param.getValue());
                     }
-                    adHolder = constructor.newInstance(values.toArray(new Object[]{}));
+                    adHolder = constructor.newInstance(values.toArray(new Object[values.size()]));
                 }
                 adHolder.setOnAdAvailabilityChanged(this);
                 adHolders.add(adHolder);
@@ -164,10 +177,24 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         }
     }
 
+    private void rotateAd() {
+        if (getVisibility() != VISIBLE) {
+            return;
+        }
+        int displayedChild = getDisplayedChild();
+        int size = mAdHolders.size();
+        for (int i = 0, j = displayedChild + 1; i < size - 1; i++, j++) {
+            AdHolder adHolder = mAdHolders.get(j % size);
+            if (adHolder.isAvailable()) {
+                setCurrentAd(adHolder);
+            }
+        }
+    }
+
     private void setCurrentAd(AdHolder adHolder) {
         Log.i(getLogTag(), "Showing adHolder " + adHolder);
         setDisplayedChild(mAdHolders.indexOf(adHolder));
-        setVisibility(View.VISIBLE);
+        setVisibility(VISIBLE);
     }
 
     private String getLogTag() {
@@ -175,7 +202,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     }
 
     public void onAdAvailabilityChanged(AdHolder adHolder) {
-        if (!adHolder.isAvailable() || getVisibility() == View.VISIBLE) {
+        if (!adHolder.isAvailable() || getVisibility() == VISIBLE) {
             return;
         }
         boolean atLeastOneAvailable = false;
@@ -193,9 +220,15 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         boolean running = mVisible && mStarted;
         if (running != mRunning) {
             if (running) {
-                mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getRefreshInterval());
+                if (mConfiguration.getRefreshInterval() != -1) {
+                    mHandler.sendMessageDelayed(Message.obtain(mHandler, REFRESH_AD), mConfiguration.getRefreshInterval());
+                }
+                if (mConfiguration.getRotateInterval() != -1) {
+                    mHandler.sendMessageDelayed(Message.obtain(mHandler, ROTATE_AD), mConfiguration.getRotateInterval());
+                }
             } else {
                 mHandler.removeMessages(REFRESH_AD);
+                mHandler.removeMessages(ROTATE_AD);
             }
             mRunning = running;
         }

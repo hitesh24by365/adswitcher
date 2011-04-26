@@ -12,15 +12,19 @@ import java.util.Map;
  */
 public class AdConfiguration {
     private final static long DEFAULT_REFRESH_INTERVAL = 30000;
+    private final static long DEFAULT_ROTATE_INTERVAL = 120000;
 
     private final long mRefreshInterval;
+    private final long rotateInterval;
     private final List<Class<? extends AdHolder>> mAdHolders;
     private final Map<Class<? extends AdHolder>, List<AdParameter>> mParams;
 
-    private AdConfiguration(long refreshInterval, List<Class<? extends AdHolder>> ads, Map<Class<? extends AdHolder>, List<AdParameter>> params) {
+    private AdConfiguration(long refreshInterval, List<Class<? extends AdHolder>> ads, Map<Class<? extends AdHolder>,
+            List<AdParameter>> params, long rotateInterval) {
         this.mRefreshInterval = refreshInterval;
         this.mAdHolders = ads;
         this.mParams = params;
+        this.rotateInterval = rotateInterval;
     }
 
     /**
@@ -45,17 +49,33 @@ public class AdConfiguration {
         return mParams.get(clazz);
     }
 
+    public long getRotateInterval() {
+        return rotateInterval;
+    }
+
     public static class Builder {
         private long refreshInterval = DEFAULT_REFRESH_INTERVAL;
+        private long rotateInterval = DEFAULT_ROTATE_INTERVAL;
         private List<Class<? extends AdHolder>> ads = new ArrayList<Class<? extends AdHolder>>();
         private Map<Class<? extends AdHolder>, List<AdParameter>> params = new HashMap<Class<? extends AdHolder>, List<AdParameter>>();
 
         /**
-         * @param refreshInterval the interval of time between each refreshing call to the ad holders (milliseconds)
+         * @param refreshInterval the interval of time between each refreshing call to the ad holders (milliseconds).
+         * Use -1 to avoid refreshing ads (don't recommended). By default this is set to 30 secs
          * @return the builder
          */
         public Builder setRefreshInterval(int refreshInterval) {
             this.refreshInterval = refreshInterval;
+            return this;
+        }
+
+        /**
+         * @param rotateInterval the interval of time between each ad rotation (milliseconds). Use -1 to avoid rotating
+         * ads. This is set to 120secs by default.
+         * @return the builder
+         */
+        public Builder setRotateInterval(int rotateInterval) {
+            this.rotateInterval = rotateInterval;
             return this;
         }
 
@@ -75,8 +95,8 @@ public class AdConfiguration {
          * @param clazz the AdHolder class to add
          * @param params the custom params needed to instantiate the AdHolder class. This most include the
          * extra parameters that the constructor has, excluding the Context object.
-         * <b>Important:</b> all AdHolder objects MUST have a constructor whose first parameter
-         * is a Context object.
+         * <p><b>Important:</b> all AdHolder objects MUST have a constructor whose first parameter
+         * is a Context object.</p>
          * @return the builder
          * @see AdHolder
          */
@@ -96,7 +116,7 @@ public class AdConfiguration {
             if (ads == null || ads.size() == 0) {
                 throw new RuntimeException("You must set at least one ad");
             }
-            return new AdConfiguration(refreshInterval, ads, params);
+            return new AdConfiguration(refreshInterval, ads, params, rotateInterval);
         }
     }
 }

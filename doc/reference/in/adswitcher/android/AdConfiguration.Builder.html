@@ -448,6 +448,22 @@ Summary:
   </td></tr>
 
 
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="../../../in/adswitcher/android/AdConfiguration.Builder.html">AdConfiguration.Builder</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../in/adswitcher/android/AdConfiguration.Builder.html#setRotateInterval(int)">setRotateInterval</a></span>(int rotateInterval)</nobr>
+        
+  </td></tr>
+
+
 
 </table>
 
@@ -794,8 +810,8 @@ From class
           <th>params</td>
           <td>the custom params needed to instantiate the AdHolder class. This most include the
  extra parameters that the constructor has, excluding the Context object.
- <b>Important:</b> all AdHolder objects MUST have a constructor whose first parameter
- is a Context object.</td>
+ <p><b>Important:</b> all AdHolder objects MUST have a constructor whose first parameter
+ is a Context object.</p></td>
         </tr>
       </table>
   </div>
@@ -880,7 +896,54 @@ From class
       <table class="jd-tagtable">
         <tr>
           <th>refreshInterval</td>
-          <td>the interval of time between each refreshing call to the ad holders (milliseconds)</td>
+          <td>the interval of time between each refreshing call to the ad holders (milliseconds).
+ Use -1 to avoid refreshing ads (don't recommended). By default this is set to 30 secs</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the builder
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setRotateInterval(int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="../../../in/adswitcher/android/AdConfiguration.Builder.html">AdConfiguration.Builder</a>
+      </span>
+      <span class="sympad">setRotateInterval</span>
+      <span class="normal">(int rotateInterval)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>rotateInterval</td>
+          <td>the interval of time between each ad rotation (milliseconds). Use -1 to avoid rotating
+ ads. This is set to 120secs by default.</td>
         </tr>
       </table>
   </div>

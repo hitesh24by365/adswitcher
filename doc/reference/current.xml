@@ -44,6 +44,17 @@
  visibility="public"
 >
 </method>
+<method name="getRotateInterval"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 </class>
 <class name="AdConfiguration.Builder"
  extends="java.lang.Object"
@@ -111,6 +122,19 @@
  visibility="public"
 >
 <parameter name="refreshInterval" type="int">
+</parameter>
+</method>
+<method name="setRotateInterval"
+ return="in.adswitcher.android.AdConfiguration.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="rotateInterval" type="int">
 </parameter>
 </method>
 </class>
