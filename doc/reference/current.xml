@@ -1,0 +1,416 @@
+<api>
+<package name="in.adswitcher.android"
+>
+<class name="AdConfiguration"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getAdHolders"
+ return="java.util.List&lt;java.lang.Class&lt;? extends in.adswitcher.android.AdHolder&gt;&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getParams"
+ return="java.util.List&lt;in.adswitcher.android.AdParameter&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="clazz" type="java.lang.Class&lt;? extends in.adswitcher.android.AdHolder&gt;">
+</parameter>
+</method>
+<method name="getRefreshInterval"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="AdConfiguration.Builder"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AdConfiguration.Builder"
+ type="in.adswitcher.android.AdConfiguration.Builder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="addAd"
+ return="in.adswitcher.android.AdConfiguration.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="clazz" type="java.lang.Class&lt;? extends in.adswitcher.android.AdHolder&gt;">
+</parameter>
+</method>
+<method name="addAd"
+ return="in.adswitcher.android.AdConfiguration.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="clazz" type="java.lang.Class&lt;? extends in.adswitcher.android.AdHolder&gt;">
+</parameter>
+<parameter name="params" type="java.util.List&lt;in.adswitcher.android.AdParameter&gt;">
+</parameter>
+</method>
+<method name="build"
+ return="in.adswitcher.android.AdConfiguration"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setRefreshInterval"
+ return="in.adswitcher.android.AdConfiguration.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="refreshInterval" type="int">
+</parameter>
+</method>
+</class>
+<class name="AdHolder"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AdHolder"
+ type="in.adswitcher.android.AdHolder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<method name="getContext"
+ return="android.content.Context"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getView"
+ return="android.view.View"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isAvailable"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="refresh"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="AdParameter"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AdParameter"
+ type="in.adswitcher.android.AdParameter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="key" type="java.lang.Class">
+</parameter>
+<parameter name="value" type="java.lang.Object">
+</parameter>
+</constructor>
+<method name="getKey"
+ return="java.lang.Class"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getValue"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="AdSettings"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AdSettings"
+ type="in.adswitcher.android.AdSettings"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="addConfiguration"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="key" type="java.lang.String">
+</parameter>
+<parameter name="configuration" type="in.adswitcher.android.AdConfiguration">
+</parameter>
+</method>
+<method name="getConfiguration"
+ return="in.adswitcher.android.AdConfiguration"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="key" type="java.lang.String">
+</parameter>
+</method>
+<method name="removeConfiguration"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="key" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<class name="AdSwitcher"
+ extends="android.widget.ViewFlipper"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="in.adswitcher.android.OnAdAvailabilityChanged">
+</implements>
+<constructor name="AdSwitcher"
+ type="in.adswitcher.android.AdSwitcher"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="attrs" type="android.util.AttributeSet">
+</parameter>
+</constructor>
+<constructor name="AdSwitcher"
+ type="in.adswitcher.android.AdSwitcher"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="adSwitcherId" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="onAdAvailabilityChanged"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="adHolder" type="in.adswitcher.android.AdHolder">
+</parameter>
+</method>
+</class>
+</package>
+<package name="in.adswitcher.android.template"
+>
+<class name="Placeholder"
+ extends="in.adswitcher.android.AdHolder"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Placeholder"
+ type="in.adswitcher.android.template.Placeholder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<constructor name="Placeholder"
+ type="in.adswitcher.android.template.Placeholder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="label" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="Placeholder"
+ type="in.adswitcher.android.template.Placeholder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="label" type="java.lang.String">
+</parameter>
+<parameter name="clickListener" type="android.view.View.OnClickListener">
+</parameter>
+</constructor>
+<constructor name="Placeholder"
+ type="in.adswitcher.android.template.Placeholder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="label" type="java.lang.String">
+</parameter>
+<parameter name="clickListener" type="android.view.View.OnClickListener">
+</parameter>
+<parameter name="showRandomly" type="java.lang.Boolean">
+</parameter>
+</constructor>
+<method name="getView"
+ return="android.view.View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="refresh"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+</api>
