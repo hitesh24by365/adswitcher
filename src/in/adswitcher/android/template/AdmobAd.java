@@ -12,8 +12,18 @@ import java.lang.reflect.*;
  * <code>Context</code> and <code>String</code>; the String parameter is the API Key you get from the dashboard
  * panel of AdMob. Make sure to pass it to the configuration object:
  * <pre>List&lt;AdParameter&gt; parameters = new ArrayList&lt;AdParameter&gt;();
+parameters.add(new AdParameter(String.class, "the-api-key"));
 AdConfiguration config = new AdConfiguration.Builder()
     .addAd(in.adswitcher.android.template.AdmobAd.class, parameters)
+    .build();</pre>
+ Also, there's a constructor that receives a boolean which indicates whether the ad will be set in testing mode:
+ <pre>
+final boolean testingMode = true;
+List&lt;AdParameter&gt; parameters = new ArrayList&lt;AdParameter&gt;();
+parameters.add(new AdParameter(String.class, "the-api-key"));
+parameters.add(new AdParameter(Boolean.class, testingMode));
+AdConfiguration config = new AdConfiguration.Builder()
+ .addAd(in.adswitcher.android.template.AdmobAd.class, parameters)
     .build();</pre>
  */
 public class AdmobAd extends AdHolder{
@@ -21,9 +31,20 @@ public class AdmobAd extends AdHolder{
     private Method mLoadAd;
     private Class<?> mAdRequestClass;
     private Object mAdView;
+    private final boolean mTesting;
+    private Method mSetTesting;
 
     public AdmobAd(Context context, String id) {
+        this(context, id, false);
+    }
+
+    public AdmobAd(Context context, String id, boolean testing) {
+        this(context, id, (Boolean) testing);
+    }
+
+    public AdmobAd(Context context, String id, Boolean testing) {
         super(context);
+        mTesting = testing;
         try {
             // 1. Get the needed classes
             Class<?> adViewClass = Class.forName("com.google.ads.AdView");
@@ -47,6 +68,7 @@ public class AdmobAd extends AdHolder{
 
             // 5. Extract other needed methods and refresh
             mLoadAd = adViewClass.getMethod("loadAd", mAdRequestClass);
+            mSetTesting = mAdRequestClass.getMethod("setTesting", boolean.class);
             refresh();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -92,7 +114,9 @@ public class AdmobAd extends AdHolder{
     public void refresh() {
         try {
             Constructor<?> constructor = mAdRequestClass.getConstructor();
-            mLoadAd.invoke(mAdView, constructor.newInstance());
+            Object adRequest = constructor.newInstance();
+            mSetTesting.invoke(adRequest, mTesting);
+            mLoadAd.invoke(mAdView, adRequest);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -100,6 +124,8 @@ public class AdmobAd extends AdHolder{
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
