@@ -380,8 +380,6 @@
 >
 <parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="adSize" type="java.lang.Object">
-</parameter>
 <parameter name="id" type="java.lang.String">
 </parameter>
 </constructor>

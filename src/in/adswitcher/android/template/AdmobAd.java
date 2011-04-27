@@ -8,12 +8,10 @@ import in.adswitcher.android.AdHolder;
 import java.lang.reflect.*;
 
 /**
- * This is a template for <a href='http://www.admob.com/'>AdMob</a>... the constructor for this class receives
- * <code>Context</code>, <code>AdSize</code> and <code>String</code>; so you must pass the <code>AdSize</code>
- * and <code>String</code> to the <code>AdConfiguration</code> object. For instance:
+ * This is a template for <a href='http://www.admob.com/'>AdMob</a>. The constructor for this class receives
+ * <code>Context</code> and <code>String</code>; the String parameter is the API Key you get from the dashboard
+ * panel of AdMob. Make sure to pass it to the configuration object:
  * <pre>List&lt;AdParameter&gt; parameters = new ArrayList&lt;AdParameter&gt;();
-parameters.add(new AdParameter(AdSize.BANNER));
-parameters.add(new AdParameter(String.class, "abcdef12345678"));
 AdConfiguration config = new AdConfiguration.Builder()
     .addAd(in.adswitcher.android.template.AdmobAd.class, parameters)
     .build();</pre>
@@ -24,18 +22,20 @@ public class AdmobAd extends AdHolder{
     private Class<?> mAdRequestClass;
     private Object mAdView;
 
-    public AdmobAd(Context context, Object adSize, String id) {
+    public AdmobAd(Context context, String id) {
         super(context);
         try {
             // 1. Get the needed classes
             Class<?> adViewClass = Class.forName("com.google.ads.AdView");
             Class<?> adListenerClass = Class.forName("com.google.ads.AdListener");
             Class<?> adSizeClass = Class.forName("com.google.ads.AdSize");
+            Field banner = adSizeClass.getField("BANNER");
+
             mAdRequestClass = Class.forName("com.google.ads.AdRequest");
 
             // 2. Instantiate the Ad View object
             Constructor<?> constructor = adViewClass.getConstructor(Activity.class, adSizeClass, String.class);
-            mAdView = constructor.newInstance(context, adSize, id);
+            mAdView = constructor.newInstance(context, banner.get(null), id);
 
             // 3. Instantiate the Ad Listener interface
             Object adListener = Proxy.newProxyInstance(adListenerClass.getClassLoader(),
@@ -61,6 +61,9 @@ public class AdmobAd extends AdHolder{
             e.printStackTrace();
             somethingWentWrong(e);
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            somethingWentWrong(e);
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
             somethingWentWrong(e);
         }

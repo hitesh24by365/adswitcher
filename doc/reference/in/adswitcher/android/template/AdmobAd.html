@@ -321,12 +321,10 @@ Summary:
 
 
 <h2>Class Overview</h2>
-<p>This is a template for <a href='http://www.admob.com/'>AdMob</a>... the constructor for this class receives
- <code>Context</code>, <code>AdSize</code> and <code>String</code>; so you must pass the <code>AdSize</code>
- and <code>String</code> to the <code>AdConfiguration</code> object. For instance:
+<p>This is a template for <a href='http://www.admob.com/'>AdMob</a>. The constructor for this class receives
+ <code>Context</code> and <code>String</code>; the String parameter is the API Key you get from the dashboard
+ panel of AdMob. Make sure to pass it to the configuration object:
  <pre>List&lt;AdParameter&gt; parameters = new ArrayList&lt;AdParameter&gt;();
-parameters.add(new AdParameter(AdSize.BANNER));
-parameters.add(new AdParameter(String.class, "abcdef12345678"));
 AdConfiguration config = new AdConfiguration.Builder()
     .addAd(in.adswitcher.android.template.AdmobAd.class, parameters)
     .build();</pre>
@@ -396,7 +394,7 @@ AdConfiguration config = new AdConfiguration.Builder()
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#AdmobAd(android.content.Context, java.lang.Object, java.lang.String)">AdmobAd</a></span>(Context context, Object adSize, String id)</nobr>
+        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#AdmobAd(android.content.Context, java.lang.String)">AdmobAd</a></span>(Context context, String id)</nobr>
         
   </td></tr>
 
@@ -764,7 +762,7 @@ From class
 
 
 
-<A NAME="AdmobAd(android.content.Context, java.lang.Object, java.lang.String)"></A>
+<A NAME="AdmobAd(android.content.Context, java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -777,7 +775,7 @@ From class
         
       </span>
       <span class="sympad">AdmobAd</span>
-      <span class="normal">(Context context, Object adSize, String id)</span>
+      <span class="normal">(Context context, String id)</span>
     </h4>
       <div class="api-level">
         <div>

@@ -7,6 +7,11 @@ import in.adswitcher.android.AdHolder;
 import java.lang.reflect.*;
 import java.util.Arrays;
 
+/**
+ * This is a template Ad for <a href='http://www.mobclix.com/'>Mobclix</a>. This does not require any special
+ * parameters... just make sure to configure Mobclix correctly by adding the API Key to the Android Manifest
+ * and to include the Jar library. This template creates a <code>MobclixMMABannerXLAdView</code>.
+ */
 public class MobclixAd extends AdHolder {
 
     private Method mGetAdMethod;
