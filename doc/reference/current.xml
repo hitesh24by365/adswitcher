@@ -434,6 +434,49 @@
 >
 </method>
 </class>
+<class name="Greystripe"
+ extends="in.adswitcher.android.AdHolder"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Greystripe"
+ type="in.adswitcher.android.template.Greystripe"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="apiKey" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="getView"
+ return="android.view.View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="refresh"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
 <class name="MobclixAd"
  extends="in.adswitcher.android.AdHolder"
  abstract="false"

@@ -55,7 +55,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  AdmobAd
+  Greystripe
 
 
 </title>
@@ -151,8 +151,8 @@
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="selected api apilevel-"><a href="../../../../in/adswitcher/android/template/AdmobAd.html">AdmobAd</a></li>
-          <li class="api apilevel-"><a href="../../../../in/adswitcher/android/template/Greystripe.html">Greystripe</a></li>
+          <li class="api apilevel-"><a href="../../../../in/adswitcher/android/template/AdmobAd.html">AdmobAd</a></li>
+          <li class="selected api apilevel-"><a href="../../../../in/adswitcher/android/template/Greystripe.html">Greystripe</a></li>
           <li class="api apilevel-"><a href="../../../../in/adswitcher/android/template/MobclixAd.html">MobclixAd</a></li>
           <li class="api apilevel-"><a href="../../../../in/adswitcher/android/template/Placeholder.html">Placeholder</a></li>
       </ul>
@@ -259,7 +259,7 @@ Summary:
      
     
     class
-<h1>AdmobAd</h1>
+<h1>Greystripe</h1>
 
 
 
@@ -306,7 +306,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">in.adswitcher.android.template.AdmobAd</td>
+        <td colspan="1" class="jd-inheritance-class-cell">in.adswitcher.android.template.Greystripe</td>
     </tr>
     
 
@@ -322,23 +322,15 @@ Summary:
 
 
 <h2>Class Overview</h2>
-<p>This is a template for <a href='http://www.admob.com/'>AdMob</a>. The constructor for this class receives
- <code>Context</code> and <code>String</code>; the String parameter is the API Key you get from the dashboard
- panel of AdMob. Make sure to pass it to the configuration object:
- <pre>List&lt;AdParameter&gt; parameters = new ArrayList&lt;AdParameter&gt;();
-parameters.add(new AdParameter(String.class, "the-api-key"));
+<p>This is a template for the <a href='http://www.greystripe.com/'>Greystripe</a> banners. Example of use:
+<pre>
+List<AdParameter> greystripeParams = new ArrayList<AdParameter>();
+greystripeParams.add(new AdParameter(String.class, "PUT HERE THE GREYSTRIPE ID"));
 AdConfiguration config = new AdConfiguration.Builder()
-    .addAd(in.adswitcher.android.template.AdmobAd.class, parameters)
-    .build();</pre>
- Also, there's a constructor that receives a boolean which indicates whether the ad will be set in testing mode:
- <pre>
-final boolean testingMode = true;
-List&lt;AdParameter&gt; parameters = new ArrayList&lt;AdParameter&gt;();
-parameters.add(new AdParameter(String.class, "the-api-key"));
-parameters.add(new AdParameter(Boolean.class, testingMode));
-AdConfiguration config = new AdConfiguration.Builder()
- .addAd(in.adswitcher.android.template.AdmobAd.class, parameters)
-    .build();</pre>
+    .addAd(in.adswitcher.android.template.Greystripe.class, greystripeParams)
+    .build();
+AdSettings.addConfiguration("main", config);
+</pre>
 </p>
 
 
@@ -405,39 +397,7 @@ AdConfiguration config = new AdConfiguration.Builder()
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#AdmobAd(android.content.Context, java.lang.String)">AdmobAd</a></span>(Context context, String id)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            </nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#AdmobAd(android.content.Context, java.lang.String, boolean)">AdmobAd</a></span>(Context context, String id, boolean testing)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            </nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#AdmobAd(android.content.Context, java.lang.String, java.lang.Boolean)">AdmobAd</a></span>(Context context, String id, Boolean testing)</nobr>
+        <span class="sympad"><a href="../../../../in/adswitcher/android/template/Greystripe.html#Greystripe(android.content.Context, java.lang.String)">Greystripe</a></span>(Context context, String apiKey)</nobr>
         
   </td></tr>
 
@@ -466,7 +426,7 @@ AdConfiguration config = new AdConfiguration.Builder()
             View</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#getView()">getView</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../in/adswitcher/android/template/Greystripe.html#getView()">getView</a></span>()</nobr>
         
         <div class="jd-descrdiv">Must return the ad banner</div>
   
@@ -484,7 +444,7 @@ AdConfiguration config = new AdConfiguration.Builder()
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../in/adswitcher/android/template/AdmobAd.html#refresh()">refresh</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../in/adswitcher/android/template/Greystripe.html#refresh()">refresh</a></span>()</nobr>
         
         <div class="jd-descrdiv">This is called by the ad switcher and you must
  make sure that you are refreshing your ads here.</div>
@@ -805,7 +765,7 @@ From class
 
 
 
-<A NAME="AdmobAd(android.content.Context, java.lang.String)"></A>
+<A NAME="Greystripe(android.content.Context, java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -817,70 +777,8 @@ From class
          
         
       </span>
-      <span class="sympad">AdmobAd</span>
-      <span class="normal">(Context context, String id)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="AdmobAd(android.content.Context, java.lang.String, boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        
-      </span>
-      <span class="sympad">AdmobAd</span>
-      <span class="normal">(Context context, String id, boolean testing)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="AdmobAd(android.content.Context, java.lang.String, java.lang.Boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-         
-         
-        
-      </span>
-      <span class="sympad">AdmobAd</span>
-      <span class="normal">(Context context, String id, Boolean testing)</span>
+      <span class="sympad">Greystripe</span>
+      <span class="normal">(Context context, String apiKey)</span>
     </h4>
       <div class="api-level">
         <div>

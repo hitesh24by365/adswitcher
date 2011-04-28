@@ -3,8 +3,11 @@ package in.adswitcher.android.template;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import in.adswitcher.android.AdHolder;
 
@@ -22,7 +25,6 @@ public class Placeholder extends AdHolder {
     }
 
     /**
-     * @param context
      * @param label the text to show in the ad
      */
     public Placeholder(Context context, String label) {
@@ -30,7 +32,6 @@ public class Placeholder extends AdHolder {
     }
 
     /**
-     * @param context
      * @param label the text to show in the ad
      * @param clickListener the click listener to set to the ad
      */
@@ -39,7 +40,6 @@ public class Placeholder extends AdHolder {
     }
 
     /**
-     * @param context
      * @param label the text to show in the ad
      * @param clickListener the click listener to set to the ad
      * @param showRandomly if true, the ad will report to be available or unavailable randomly. if false, the ad
@@ -49,6 +49,11 @@ public class Placeholder extends AdHolder {
         super(context);
         this.showRandomly = showRandomly;
         view = new TextView(context);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display defaultDisplay = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        defaultDisplay.getMetrics(metrics);
+        view.setHeight((int) (metrics.density * 50));// 50dip height
         view.setBackgroundColor(Color.RED);
         view.setTextColor(Color.WHITE);
         view.setText(label);
