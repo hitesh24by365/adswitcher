@@ -32,6 +32,22 @@ public class Placeholder extends AdHolder {
     }
 
     /**
+     * @param showRandomly if true, the ad will report to be available or unavailable randomly. if false, the ad
+     * will always be available
+     */
+    public Placeholder(Context context, Boolean showRandomly) {
+        this(context, "AdHolder placeholder", getDefaultClickListener(), showRandomly);
+    }
+
+    /**
+     * @param showRandomly if true, the ad will report to be available or unavailable randomly. if false, the ad
+     * will always be available
+     */
+    public Placeholder(Context context, boolean showRandomly) {
+        this(context, "AdHolder placeholder", getDefaultClickListener(), showRandomly);
+    }
+
+    /**
      * @param label the text to show in the ad
      * @param clickListener the click listener to set to the ad
      */

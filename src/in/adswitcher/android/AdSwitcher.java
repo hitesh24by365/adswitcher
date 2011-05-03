@@ -1,5 +1,6 @@
 package in.adswitcher.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -35,7 +36,7 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private Handler mHandler;
 
     /**
-     * @param context the context used to inflate the view
+     * @param context      the context used to inflate the view
      * @param adSwitcherId the configuration ID
      */
     public AdSwitcher(Context context, String adSwitcherId) {
@@ -194,7 +195,17 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
     private void setCurrentAd(AdHolder adHolder) {
         Log.i(getLogTag(), "Showing adHolder " + adHolder);
         setDisplayedChild(mAdHolders.indexOf(adHolder));
-        setVisibility(VISIBLE);
+        if (getContext() instanceof Activity) {
+            Activity activity = (Activity) getContext();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setVisibility(VISIBLE);
+                }
+            });
+        } else {
+            setVisibility(VISIBLE);
+        }
     }
 
     private String getLogTag() {

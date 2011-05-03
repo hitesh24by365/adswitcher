@@ -363,6 +363,23 @@
 </package>
 <package name="in.adswitcher.android.template"
 >
+<class name="AMOAd"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="AMOAd"
+ type="in.adswitcher.android.template.AMOAd"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
 <class name="AdmobAd"
  extends="in.adswitcher.android.AdHolder"
  abstract="false"
@@ -477,6 +494,79 @@
 >
 </method>
 </class>
+<class name="JumpTap"
+ extends="in.adswitcher.android.AdHolder"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JumpTap"
+ type="in.adswitcher.android.template.JumpTap"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="publisherId" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="JumpTap"
+ type="in.adswitcher.android.template.JumpTap"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="publisherId" type="java.lang.String">
+</parameter>
+<parameter name="spotId" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="JumpTap"
+ type="in.adswitcher.android.template.JumpTap"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="publisherId" type="java.lang.String">
+</parameter>
+<parameter name="spotId" type="java.lang.String">
+</parameter>
+<parameter name="siteId" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="getView"
+ return="android.view.View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="refresh"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
 <class name="MobclixAd"
  extends="in.adswitcher.android.AdHolder"
  abstract="false"
@@ -534,6 +624,30 @@
  visibility="public"
 >
 <parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<constructor name="Placeholder"
+ type="in.adswitcher.android.template.Placeholder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="showRandomly" type="boolean">
+</parameter>
+</constructor>
+<constructor name="Placeholder"
+ type="in.adswitcher.android.template.Placeholder"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="showRandomly" type="java.lang.Boolean">
 </parameter>
 </constructor>
 <constructor name="Placeholder"
