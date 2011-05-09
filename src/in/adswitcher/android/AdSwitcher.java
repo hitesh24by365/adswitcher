@@ -151,7 +151,12 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+        try {
+            // as suggested here http://daniel-codes.blogspot.com/2010/05/viewflipper-receiver-not-registered.html
+            super.onDetachedFromWindow();
+        } catch (IllegalArgumentException e) {
+            stopFlipping();
+        }
         mStarted = false;
         updateRunning();
     }
