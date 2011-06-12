@@ -6,7 +6,8 @@
     <groupId>com.egoclean</groupId>
     <artifactId>adswitcher</artifactId>
     <version>1.0</version>
-    <packaging>apk</packaging>
+    <packaging>jar</packaging>
+    <name>Ad Switcher</name>
 
     <dependencies>
         <dependency>
