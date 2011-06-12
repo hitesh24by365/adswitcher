@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="adswitcher:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/adswitcher_jar</output-path>
-    <root id="archive" name="adswitcher.jar">
-      <element id="module-output" name="adswitcher" />
-    </root>
-  </artifact>
-</component>
