@@ -61,6 +61,9 @@ public class AdSwitcher extends ViewFlipper implements OnAdAvailabilityChanged {
         mConfiguration = AdSettings.getConfiguration(mAdSwitcherId);
         mAdHolders = buildAds();
         for (AdHolder adHolder : mAdHolders) {
+            if (adHolder == null || adHolder.getView() == null) {
+                continue;
+            }
             ViewParent parent = adHolder.getView().getParent();
             if (parent != null) {
                 ((AdSwitcher) parent).removeView(adHolder.getView());
